@@ -87,29 +87,86 @@
 
 
 
+(defun mmsql-fdef(fname ftype null default unique &optional fromProgram)
+  ""
+  (interactive 
+    "sfield name: \nsfield type: \nscan be NULL? (any key for 'no', blank for 'yes'): \nsdefault value: \nsunique? (any key for 'yes', blank for 'no'):"
+  )
+  
+  (let
+    (
+      textStrings
+    )
+    (if(not (equal null ""))
+      (progn
+        (setq null " NOT NULL ")
+      )
+      (setq null " ")
+    )    
+    (if(not (equal default ""))
+      (progn
+        (setq default (concat "DEFAULT " default " "))
+      )
+    )      
+    (if(not (equal unique ""))
+      (progn
+        (setq unique "UNIQUE")
+      )
+      (setq unique "")
+    )       
+    (setq textStrings ;предварительный список строк
+      (list
+        (concat
+          fname
+          " "
+          ftype
+          null     
+          default
+          unique
+        )
+      )
+    )
+    (mmsql-common-procedure-and-print textStrings)    
+  )
+)
+
+
 
 
 
 (defun mmsql-ctb(temporary tbname)
   ""
-  (interactive "stemporary? (any key for 'yes', blank for 'no') \nstable name: ")
+  (interactive "stemporary? (any key for 'yes', blank for 'no'): \nstable name: ")
   
   (let
     (
-      
+      textStrings
     )
     (if(not (equal temporary ""))
       (progn
-        (setq temporary "TEMPORARY")
+        (setq temporary " TEMPORARY ")
       )
+      (setq temporary " ")
     )
+    
+    
+    
+    
     (setq textStrings ;предварительный список строк
       (list
-        (concat "CREATE " temporary " TABLE IF NOT EXISTS " tbname)
-        
+        (concat "CREATE" temporary "TABLE IF NOT EXISTS " tbname)
+        "("
+        (concat (make-string tab-width ?\ ) "mmsql-fdef,")
+        (concat (make-string tab-width ?\ ) "mmsql-fdef,")
+        (concat (make-string tab-width ?\ ) "mmsql-tbopt")
+        ")"
+        (concat (make-string tab-width ?\ ) "mmsql-selst")
+        ";"
       )
     )
-    (mmsql-common-procedure-and-print textStrings)      
+    (mmsql-common-procedure-and-print textStrings)
+    (previous-line 5)
+    (back-to-indentation)
   )
 )
 
