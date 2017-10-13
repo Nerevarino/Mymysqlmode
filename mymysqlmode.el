@@ -172,8 +172,46 @@
 
 
 
+(defun mmsql-dtb(tbname)
+  ""
+  (interactive "stable name: ")
+  
+  (let
+    (
+      
+    )
+    (setq textStrings ;предварительный список строк
+      (list
+        (concat "DROP TABLE IF EXISTS " tbname ";")
+      )
+    )
+    (mmsql-common-procedure-and-print textStrings)    
+  )
+)
 
 
+
+
+(defun mmsql-ins(tbname)
+  ""
+  (interactive "stable name: ")
+  
+  (let
+    (
+      
+    )
+    (setq textStrings ;предварительный список строк
+      (list
+        "INSERT INTO"
+        (concat (make-string tab-width ?\ ) tbname "()")
+        "VALUES"
+        (concat (make-string tab-width ?\ ) "()")
+        ";"
+      )
+    )
+    (mmsql-common-procedure-and-print textStrings)
+  )
+)
 
 
 
